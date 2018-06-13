@@ -146,16 +146,18 @@ const createReview = () => {
 
     checkInput(name);
     checkInput(place);   
-    checkInput(review);   
+    checkInput(review);
 
     if(name.classList.contains('error') || place.classList.contains('error') || review.classList.contains('error')) return;
+
+    const date = getDate();
+    addReview(name,place,review, date);
 
     const data = myMap.balloon.getData();
     
     const newData = {
         latlong: data.latlong ? data.latlong : data.geometry.getCoordinates(),
         address: data.address
-        
     };
     const placemarker = createPlaceMarker(newData);
 
@@ -175,4 +177,24 @@ const clearForm = () => {
     name.value   = "";
     place.value  = "";
     review.value = "";
+};
+
+const getDate = () => {
+    let d = new Date(),
+        h = d.getHours() < 10 ? `0${d.getHours()}` : d.getHours(),
+        m = d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes(),
+        day = d.getDay() < 10 ? `0${d.getDay()}` : d.getDay(),
+        month = d.getMonth() < 10 ? `0${d.getMonth()}` : d.getMonth(),
+        year = d.getFullYear();
+    let date = `${day}-${month}-${year} ${h}:${m}`
+
+    return date;
+};
+
+const addReview = (name,place,review,date) => {
+    console.log(name, place, review, list)
+    const li = document.createElement('li');
+    li.classList.add('list-item');
+    li.innerHTML = `<b>${name.value}</b> ${place.value} ${date}</br>${review.value}`;
+    list.appendChild(li)
 };
