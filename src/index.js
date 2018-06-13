@@ -71,7 +71,11 @@ const OnMapClick = () => {
                 address: address
             };
             openBalloon(data)
-
+            
+            setTimeout(() => {
+                list    =   document.querySelector('#list');
+                if(!list.length) list.innerHTML = "<li class='list-item initial'>Пока нет отзывов...</li>";
+            },100);
         });
 
         } else {
@@ -161,9 +165,11 @@ const createReview = () => {
     };
     const placemarker = createPlaceMarker(newData);
 
+
     clusterer.add(placemarker);
 
     clearForm();
+
         
 
 };
@@ -195,5 +201,6 @@ const addReview = (name,place,review,date) => {
     const li = document.createElement('li');
     li.classList.add('list-item');
     li.innerHTML = `<b>${name.value}</b> ${place.value} <small>${date}</small></br>${review.value}`;
+    if (list.firstChild.classList.contains('initial')) list.innerHTML = '';
     list.appendChild(li)
 };
