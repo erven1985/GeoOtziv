@@ -161,16 +161,23 @@ const createReview = () => {
     
     const newData = {
         latlong: data.latlong ? data.latlong : data.geometry.getCoordinates(),
-        address: data.address
+        address: data.address,
+        review: {
+            name: name.value,
+            place: place.value,
+            review: review.value,
+            date: date
+        }
     };
+
+    console.log(newData)
     const placemarker = createPlaceMarker(newData);
 
+    saveToLocalStorage(newData);
 
     clusterer.add(placemarker);
 
     clearForm();
-
-        
 
 };
 
@@ -203,4 +210,24 @@ const addReview = (name,place,review,date) => {
     li.innerHTML = `<b>${name.value}</b> ${place.value} <small>${date}</small></br>${review.value}`;
     if (list.firstChild.classList.contains('initial')) list.innerHTML = '';
     list.appendChild(li)
+};
+
+
+const saveToLocalStorage = (data) => {
+    
+    if (!window.storage) {
+        window.storage = new Map;
+    }
+
+    let storage = window.storage,
+        key = data.address;
+
+    if (!storage.has(key)) {
+        storage.set(key, [data.review])
+    } else {
+        let reviews = storage.get(key);
+        reviews.push(data.review);
+        storage.set(key, reviews);
+    }
+    console.log(window.storage)
 };
